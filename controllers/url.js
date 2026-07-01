@@ -9,7 +9,11 @@ async function handleGenerateShortURL(req, res){
         redirectUrl: body.url,
         visitHistory:[],
     })
-    return res.json({id: shortID})
+    const allUrls = await URL.find({});
+    return res.render('home',{
+        id: shortID,
+        urls:allUrls,
+    })
 }
 
 async function handleRedirectToMainUrl(req , res){
