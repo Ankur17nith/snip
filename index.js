@@ -3,7 +3,7 @@ const path=require('path')
 const cookieParser =require("cookie-parser")
 const URL= require('./models/url')
 const {connectToMongoDb}=require('./connect')
-const {restrictToLoggedInUserOnly, checkAuth}=require("./middleware/auth")
+const {restrictTo, checkForAuthentiication}=require("./middleware/auth")
 const app=express();
 const PORT=7000;
 
@@ -21,9 +21,10 @@ app.set('views', path.resolve("./views"))
 app.use(express.json());
 app.use(express.urlencoded({extended: false}))
 app.use(cookieParser())
+app.use(checkForAuthentiication)
 
-app.use('/url',restrictToLoggedInUserOnly, urlRoute)
-app.use('/', checkAuth, staticRoute)
+app.use('/url',restrictTo("NORMAL"), urlRoute)
+app.use('/', staticRoute)
 app.use("/user", userRoute);
 
 
